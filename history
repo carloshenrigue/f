@@ -1,0 +1,139 @@
+import { useTheme } from '@mui/material';
+import Autocomplete from '@mui/material/Autocomplete';
+import Box from '@mui/material/Box';
+import Paper from '@mui/material/Paper';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TablePagination from '@mui/material/TablePagination';
+import TableRow from '@mui/material/TableRow';
+import TextField from '@mui/material/TextField';
+import * as React from 'react';
+
+interface Column {
+  id: 'items' | 'date' | 'quantity';
+  label: string;
+  minWidth?: number;
+  align?: 'right';
+  format?: (value: any) => string;
+}
+
+const columns: readonly Column[] = [
+  { id: 'items', label: 'Itens', minWidth: 170 },
+  {
+    id: 'date',
+    label: 'Data da venda',
+    minWidth: 100,
+    format: (date: Date) => date.toISOString(),
+  },
+  {
+    id: 'quantity',
+    label: 'Total items',
+    minWidth: 170,
+    align: 'right',
+  },
+];
+
+interface Data {
+  items: string;
+  date: Date;
+  quantity: number;
+}
+
+const data: Data[] = [
+  {
+    items: 'Fio de alumínio, Cano pvc 2m',
+    date: new Date(),
+    quantity: 2,
+  },
+  {
+    items: 'Fio de alumínio, Cano pvc 2m',
+    date: new Date(),
+    quantity: 3,
+  },
+];
+
+const History: React.FC = () => {
+  const theme = useTheme();
+  const [page, setPage] = React.useState(0);
+  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+
+  const handleChangePage = (event: unknown, newPage: number) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    setRowsPerPage(+event.target.value);
+    setPage(0);
+  };
+
+  return (
+    <Box sx={{ mt: theme.spacing(4) }}>
+      <Autocomplete
+        disablePortal
+        id="combo-box-demo"
+        options={[]}
+        sx={{ width: 300 }}
+        renderInput={(params) => (
+          <TextField {...params} label="Nome/Código do produto" />
+        )}
+      />
+      <Paper sx={{ width: '100%', overflow: 'hidden', mt: theme.spacing(4) }}>
+        <TableContainer sx={{ maxHeight: 440 }}>
+          <Table stickyHeader aria-label="sticky table">
+            <TableHead>
+              <TableRow>
+                {columns.map((column) => (
+                  <TableCell
+                    key={column.id}
+                    align={column.align}
+                    style={{ minWidth: column.minWidth }}
+                  >
+                    {column.label}
+                  </TableCell>
+                ))}
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {data
+                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                .map((row) => {
+                  return (
+                    <TableRow
+                      hover
+                      role="checkbox"
+                      tabIndex={-1}
+                      key={row.items}
+                    >
+                      {columns.map((column) => {
+                        const value = row[column.id];
+                        return (
+                          <TableCell key={column.id} align={column.align}>
+                            {column.format ? column.format(value) : value}
+                          </TableCell>
+                        );
+                      })}
+                    </TableRow>
+                  );
+                })}
+            </TableBody>
+          </Table>
+        </TableContainer>
+        <TablePagination
+          rowsPerPageOptions={[10, 25, 100]}
+          component="div"
+          count={data.length}
+          rowsPerPage={rowsPerPage}
+          page={page}
+          onPageChange={handleChangePage}
+          onRowsPerPageChange={handleChangeRowsPerPage}
+        />
+      </Paper>
+    </Box>
+  );
+};
+export { History };
