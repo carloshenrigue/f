@@ -1,0 +1,152 @@
+import PrintIcon from '@mui/icons-material/Print';
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import Autocomplete from '@mui/material/Autocomplete';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import IconButton from '@mui/material/IconButton';
+import Paper from '@mui/material/Paper';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import TextField from '@mui/material/TextField';
+import * as React from 'react';
+// import { Container } from './styles';
+function createData(
+  name: string,
+  calories: number,
+  fat: number,
+  carbs: number,
+  protein: number,
+) {
+  return { name, calories, fat, carbs, protein };
+}
+
+const NewCashSale: React.FC = () => {
+  const top100Films = [
+    { label: 'The Shawshank Redemption', year: 1994 },
+    { label: 'The Godfather', year: 1972 },
+  ];
+
+  const rows = [
+    createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
+    createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
+    createData('Eclair', 262, 16.0, 24, 6.0),
+    createData('Cupcake', 305, 3.7, 67, 4.3),
+    createData('Gingerbread', 356, 16.0, 49, 3.9),
+  ];
+  return (
+    <Box>
+      <Box
+        sx={{
+          marginTop: '2%',
+          display: 'flex',
+          flexDirection: { xs: 'column', md: 'row' },
+          alignItems: 'center',
+          overflow: 'hidden',
+          fontWeight: 'bold',
+        }}
+      >
+        <Autocomplete
+          disablePortal
+          id="combo-box-demo"
+          options={top100Films}
+          sx={{ width: 300 }}
+          renderInput={(params) => (
+            <TextField {...params} label="Nome do produto" />
+          )}
+        />
+
+        <Box
+          component="form"
+          sx={{
+            '& > :not(style)': { m: 2, width: '10ch' },
+          }}
+          noValidate
+          autoComplete="off"
+        >
+          <TextField id="filled-basic" label="Quantidade" variant="filled" />
+          <TextField id="filled-basic" label="Preço" variant="filled" />
+          <TextField id="filled-basic" label="Código" variant="filled" />
+        </Box>
+
+        <TextField
+          id="filled-basic"
+          label="Desconto"
+          variant="filled"
+          sx={{ m: 1, width: '14ch', ml: 7 }}
+        />
+        <IconButton aria-label="delete" size="large" sx={{ m: 3 }}>
+          <PrintIcon fontSize="inherit" color="primary" />
+        </IconButton>
+        <IconButton aria-label="delete" size="large">
+          <ShoppingCartIcon fontSize="inherit" color="primary" />
+        </IconButton>
+        <Box sx={{ '& button': { m: 3 } }}>
+          <Button variant="outlined" size="large">
+            Efetuar Venda
+          </Button>
+        </Box>
+      </Box>
+
+      <TableContainer component={Paper}>
+        <Table
+          sx={{ minWidth: 650, marginTop: '1%' }}
+          size="small"
+          aria-label="a dense table"
+        >
+          <TableHead>
+            <TableRow>
+              <TableCell>Dessert (100g serving)</TableCell>
+              <TableCell align="right">Calories</TableCell>
+              <TableCell align="right">Fat&nbsp;(g)</TableCell>
+              <TableCell align="right">Carbs&nbsp;(g)</TableCell>
+              <TableCell align="right">Protein&nbsp;(g)</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {rows.map((row) => (
+              <TableRow
+                key={row.name}
+                sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+              >
+                <TableCell component="th" scope="row">
+                  {row.name}
+                </TableCell>
+                <TableCell align="right">{row.calories}</TableCell>
+                <TableCell align="right">{row.fat}</TableCell>
+                <TableCell align="right">{row.carbs}</TableCell>
+                <TableCell align="right">{row.protein}</TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+      <Box
+        sx={{
+          marginTop: '2%',
+          display: 'flex',
+          flexDirection: { xs: 'column', md: 'row' },
+          alignItems: 'center',
+          ml: 50,
+        }}
+      >
+        <TextField
+          id="outlined-basic"
+          label="Preço total:"
+          variant="outlined"
+        />
+        <TextField
+          sx={{ m: 1 }}
+          id="outlined-basic"
+          label="Preço com desconto:"
+          variant="outlined"
+        />
+      </Box>
+    </Box>
+  );
+};
+
+export { NewCashSale };
